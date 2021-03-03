@@ -11,6 +11,8 @@ let store = {
       _numOfHiglight: 3,
       _matrixMinCeil: 100,
       _matrixMaxCeil: 999,
+      _sum:'',
+      _aver:'',
       setNumOfCol(num) {
         if (num != undefined) {
           this._numOfCol = num;
@@ -58,13 +60,15 @@ let store = {
         return this.data;
       },
       calcSum() {
-        return this.calcSumAndAv(this.data, "sum");
+          this._sum = this.calcSumAndAv(this.data, "sum")
+        return this._sum;
       },
       calcAver() {
         let arr = this.data[0].map((_, colIndex) =>
           this.data.map((row) => row[colIndex])
         );
-        return this.calcSumAndAv(arr, "aver");
+        this._aver = this.calcSumAndAv(arr, "aver");
+        return this._aver
       },
       calcSumAndAv(arr, arg) {
         let arrAver = [];
@@ -76,7 +80,7 @@ let store = {
             sum += arr[i][j].amount;
           }
           arrSum.push(sum);
-          av = sum / arr[i].length;
+          av = Math.round(sum / arr[i].length);
           arrAver.push(av);
           av = 0;
           sum = 0;
@@ -142,6 +146,18 @@ let store = {
         }
         return arrRes;
       },
+      percentOfSum(arr,j) {
+          let sum = this._sum;
+          let result = [];
+        for (let i = 0; i < arr.length; i++) {
+            result.push(Math.round((arr[i].amount/sum[j])*100))
+        }
+        return result
+      },
+      removeRow(id){
+          //here need to regenerate matrix
+        return  this.data.splice(id,1)
+      }
     },
   },
 };
@@ -149,4 +165,5 @@ console.log(...store.state.matrix.generateMatrix());
 console.log(...store.state.matrix.calcSum());
 console.log(...store.state.matrix.calcAver());
 console.log(...store.state.matrix.findXSame(300));
+console.log(...store.state.matrix.percentOfSum(store.state.matrix.data[2],2));
 // console.log(...store.state.matrix.sortFromLow());
