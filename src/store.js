@@ -161,9 +161,8 @@ let store = {
     },
   },
 };
-console.log(...store.state.matrix.generateMatrix());
-console.log(...store.state.matrix.calcSum());
-console.log(...store.state.matrix.calcAver());
-console.log(...store.state.matrix.findXSame(300));
-console.log(...store.state.matrix.percentOfSum(store.state.matrix.data[2],2));
-// console.log(...store.state.matrix.sortFromLow());
+// console.log(...store.state.matrix.generateMatrix());
+// console.log(...store.state.matrix.calcSum());
+// console.log(...store.state.matrix.calcAver());
+// console.log(...store.state.matrix.findXSame(300));
+// console.log(...store.state.matrix.percentOfSum(store.state.matrix.data[2],2));
