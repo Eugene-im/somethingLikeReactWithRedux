@@ -11,22 +11,37 @@ let store = {
       _numOfHiglight: 3,
       _matrixMinCeil: 100,
       _matrixMaxCeil: 999,
-      _sum:'',
-      _aver:'',
+      _sum: "",
+      _aver: "",
+      percentOfSumData: "",
+      _min: 2,
+      _max: 10,
       setNumOfCol(num) {
-        if (num != undefined) {
+        if (num != undefined && num > 1) {
           this._numOfCol = num;
         }
+        this._numOfCol = this.getRand(this._min, this._max);
       },
       setNumOfRow(num) {
-        if (num != undefined) {
+        if (num != undefined && num > 1) {
           this._numOfRow = num;
         }
+        this._numOfRow = this.getRand(this._min, this._max);
       },
       setNumOfHiglight(num) {
-        if (num != undefined) {
+        if (num != undefined && num > 0) {
           this._numOfHiglight = num;
         }
+        this._numOfHiglight = this.getRand(this._min, this._max);
+      },
+      setInputData(m, n, x) {
+        if (x >= m * n) {
+          throw new Error("!!!!!!! x < m*n !!!!!!!");
+        }
+        this.setNumOfCol(m);
+        this.setNumOfRow(n);
+        this.setNumOfHiglight(x);
+        this.update();
       },
       getNumOfCol() {
         return this._numOfCol;
@@ -37,11 +52,14 @@ let store = {
       getNumOfHiglight() {
         return this._numOfHiglight;
       },
+      getRand(max, min) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      },
       generateMatrixCeilData(a, b) {
         let ceil = {};
         min = this._matrixMinCeil;
         max = this._matrixMaxCeil;
-        ceil.amount = Math.floor(Math.random() * (max - min + 1)) + min;
+        ceil.amount = this.getRand(max, min);
         ceil.id = +((a + 1).toString() + (b + 1).toString());
         return ceil;
       },
@@ -60,7 +78,7 @@ let store = {
         return this.data;
       },
       calcSum() {
-          this._sum = this.calcSumAndAv(this.data, "sum")
+        this._sum = this.calcSumAndAv(this.data, "sum");
         return this._sum;
       },
       calcAver() {
@@ -68,7 +86,7 @@ let store = {
           this.data.map((row) => row[colIndex])
         );
         this._aver = this.calcSumAndAv(arr, "aver");
-        return this._aver
+        return this._aver;
       },
       calcSumAndAv(arr, arg) {
         let arrAver = [];
@@ -104,8 +122,8 @@ let store = {
         xData.half = Math.floor(x / 2);
         xData.odd = x % 2 !== 0;
         let obj = "";
+        //note that element[id] need to change to element[amount]
         el.find((element, i) => {
-          //note that element[id] need to change to element[amount]
           if (element.amount == amount) {
             obj = {};
             obj.id = element.id;
@@ -146,18 +164,68 @@ let store = {
         }
         return arrRes;
       },
-      percentOfSum(arr,j) {
-          let sum = this._sum;
-          let result = [];
+      percentOfSum() {
+        let sum = this._sum;
+        let result = [];
+        let arr = this.data;
         for (let i = 0; i < arr.length; i++) {
-            result.push(Math.round((arr[i].amount/sum[j])*100))
+          result.push([]);
+          for (let j = 0; j < arr[i].length; j++) {
+            result[i].push(Math.round((arr[i][j].amount / sum[j]) * 100));
+          }
         }
-        return result
+        this.percentOfSumData = result;
+        return this.percentOfSumData;
       },
-      removeRow(id){
-          //here need to regenerate matrix
-        return  this.data.splice(id,1)
-      }
+      removeRow(id) {
+        //here need to regenerate matrix
+        return this.data.splice(id, 1);
+      },
+      addRow(id){
+        let row = this.getNumOfRow() + 1;
+        this.setNumOfRow(row);
+
+//gen part of data[i] + with {} + copy to obj.index
+//push data[i] to data from updateData
+
+        this.updateData(obj);
+        this.updatePart();
+      },
+      ceillClick(id) {
+        let el = this.oneDimData;
+        let obj = "";
+        el.find((element, i) => {
+          if (element.id == id) {
+            obj = {};
+            obj.id = element.id;
+            obj.index = i;
+            obj.amount = element.amount + 1;
+            return obj;
+          }
+          return obj;
+        });
+        this.updateData(obj);
+        this.updatePart();
+      },
+      updateData(a) {
+        let i = a.id.toString()[0] - 1;
+        let j = a.id.toString()[1] - 1;
+        let k = a.index;
+        this.data[i][j].amount = a.amount;
+        this.dataAmount[i][j] = a.amount;
+        this.oneDimDataAmount[k] = a.amount;
+        this.oneDimData[k].amount = a.amount;
+      },
+      updatePart() {
+        this.calcSum();
+        this.calcAver();
+        this.findXSame();
+        this.percentOfSum();
+      },
+      updateAll() {
+        this.generateMatrix();
+        this.updatePart();
+      },
     },
   },
 };
