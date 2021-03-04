@@ -1,7 +1,69 @@
-import logo from './logo.svg';
-import './App.scss';
+// import logo from './logo.svg';
+import React from "react";
+import "./App.scss";
 
-function App() {
+const App = (props) => {
+  // debugger;
+  let state = props.store.getState();
+  console.log("props", props);
+  console.log("state", state);
+  // let numOfCol = '';
+  let numOfCol = props.store.getNumOfCol();
+  let numOfRow = props.store.getNumOfRow();
+  let numOfHiglight = props.store.getNumOfHiglight();
+  let inputM = React.createRef();
+  let inputN = React.createRef();
+  let inputX = React.createRef();
+  let ceil11 = React.createRef();
+  let ceilSum1 = React.createRef();
+  let add0 = React.createRef();
+  let rem0 = React.createRef();
+  let rowAdd = () => {
+    let ceil = {};
+    ceil.id = +add0.current.attributes.rowid.value;
+    props.store.dispatch({ type: "ROW-ADD", data: ceil.id });
+  };
+  let rowRem = () => {
+    let ceil = {};
+    ceil.id = +rem0.current.attributes.rowid.value;
+    props.store.dispatch({ type: "ROW-REM", data: ceil.id });
+  };
+  let ceilClick = () => {
+    let ceil = {};
+    ceil.id = +ceil11.current.id;
+    props.store.dispatch({ type: "CEIL-CLICK", data: ceil.id });
+  };
+  let ceilHover = () => {
+    let ceil = {};
+    ceil.amount = +ceil11.current.innerText;
+    props.store.dispatch({ type: "CEIL-HOVER", data: ceil.amount });
+  };
+  let sumHover = () => {
+    console.log("need only to view");
+  };
+  let updNumM = () => {
+    let m = +inputM.current.value;
+    props.store.dispatch({ type: "MNX-UPD", what: "m", data: m });
+  };
+  let updNumN = () => {
+    let n = +inputM.current.value;
+    props.store.dispatch({ type: "MNX-UPD", what: "n", data: n });
+  };
+  let updNumX = () => {
+    let x = +inputM.current.value;
+    props.store.dispatch({ type: "MNX-UPD", what: "x", data: x });
+  };
+  let generateMatrix = () => {
+    let m = +inputM.current.value;
+    let n = +inputN.current.value;
+    let x = +inputX.current.value;
+    // console.log(typeof(m));
+    // console.log(typeof(n));
+    // console.log(typeof(x));
+    console.log(m, n, x);
+    props.store.dispatch({ type: "MATRIX-GENERATE", data: { m, n, x } });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -10,26 +72,86 @@ function App() {
       <main className="App-main">
         <div className="app-input">
           <div className="input-group">
-            <label className="input-label" htmlFor="col">Columns (M)</label>
-            <input className="input-item" name="col" type="number" defaultValue='3'/>
+            <label className="input-label" htmlFor="col">
+              Columns (M)
+            </label>
+            <input
+              className="input-item"
+              name="col"
+              type="number"
+              ref={inputM}
+              onChange={updNumM}
+              defaultValue={numOfCol}
+            />
           </div>
           <div className="input-group">
-            <label className="input-label" htmlFor="row">Rows (N)</label>
-            <input className="input-item" name="row" type="number" defaultValue='3'/>
+            <label className="input-label" htmlFor="row">
+              Rows (N)
+            </label>
+            <input
+              className="input-item"
+              name="row"
+              type="number"
+              ref={inputN}
+              onChange={updNumN}
+              defaultValue={numOfRow}
+            />
           </div>
           <div className="input-group last">
-            <label className="input-label" htmlFor="row">Number of cells with same amount (X)</label>
-            <input className="input-item" name="row" type="number" defaultValue='3'/>
+            <label className="input-label" htmlFor="row">
+              Number of cells with same amount (X)
+            </label>
+            <input
+              className="input-item"
+              name="row"
+              type="number"
+              ref={inputX}
+              onChange={updNumX}
+              defaultValue={numOfHiglight}
+              // onChange={() => console.log(inputX.current.value)}
+            />
           </div>
-          <button className="input-button" onClick={()=>{console.log('i`ll generate something')}}>Generate matrix</button>
+          <button className="input-button" onClick={generateMatrix}>
+            Generate matrix
+          </button>
         </div>
         <div className="app-output">
           <div className="output-matrix matrix">
             <div className="matrix-row row-1">
-              <div className="matrix-cell cell-item cell-11">100</div>
+              <div
+                id="11"
+                ref={ceil11}
+                onMouseOver={ceilHover}
+                onClick={ceilClick}
+                className="matrix-cell cell-item cell-11"
+              >
+                100
+              </div>
               <div className="matrix-cell cell-item cell-12">999</div>
               <div className="matrix-cell cell-item cell-13">555</div>
-              <div className="matrix-cell cell-amount">3</div>
+              <div
+                ref={ceilSum1}
+                onMouseOver={sumHover}
+                className="matrix-cell cell-amount"
+              >
+                3
+              </div>
+              <button
+                ref={add0}
+                onClick={rowAdd}
+                rowid="0"
+                className="matrix-cell cell-row-add"
+              >
+                +
+              </button>
+              <button
+                ref={rem0}
+                onClick={rowRem}
+                rowid="0"
+                className="matrix-cell cell-row-rem"
+              >
+                -
+              </button>
             </div>
             <div className="matrix-row row-2">
               <div className="matrix-cell cell-item cell-21">148</div>
@@ -56,6 +178,6 @@ function App() {
       </footer>
     </div>
   );
-}
+};
 
 export default App;

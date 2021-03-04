@@ -1,5 +1,7 @@
+// imoprt dialogReducer from "./dialogReducer"
+
 let store = {
-  state: {
+  _state: {
     matrix: {
       data: [],
       oneDimData: [],
@@ -11,8 +13,9 @@ let store = {
       _numOfHiglight: 3,
       _matrixMinCeil: 100,
       _matrixMaxCeil: 999,
-      _sum: "",
-      _aver: "",
+      sum: "",
+      aver: "",
+      sameX: "",
       percentOfSumData: "",
       _min: 2,
       _max: 10,
@@ -78,15 +81,15 @@ let store = {
         return this.data;
       },
       calcSum() {
-        this._sum = this.calcSumAndAv(this.data, "sum");
-        return this._sum;
+        this.sum = [...this.calcSumAndAv(this.data, "sum")];
+        return this.sum;
       },
       calcAver() {
         let arr = this.data[0].map((_, colIndex) =>
           this.data.map((row) => row[colIndex])
         );
-        this._aver = this.calcSumAndAv(arr, "aver");
-        return this._aver;
+        this.aver = [...this.calcSumAndAv(arr, "aver")];
+        return this.aver;
       },
       calcSumAndAv(arr, arg) {
         let arrAver = [];
@@ -162,10 +165,11 @@ let store = {
           }
           closest = {};
         }
-        return arrRes;
+        this.sameX = [...arrRes];
+        return this.sameX;
       },
       percentOfSum() {
-        let sum = this._sum;
+        let sum = this.sum;
         let result = [];
         let arr = this.data;
         for (let i = 0; i < arr.length; i++) {
@@ -174,21 +178,45 @@ let store = {
             result[i].push(Math.round((arr[i][j].amount / sum[j]) * 100));
           }
         }
-        this.percentOfSumData = result;
+        this.percentOfSumData = [...result];
         return this.percentOfSumData;
       },
-      removeRow(id) {
-        //here need to regenerate matrix
-        return this.data.splice(id, 1);
+      removeRow(i) {
+        let arr = [...this.data[i]];
+        let el = this.oneDimData;
+        let elAmount = this.oneDimDataAmount;
+        this.data.splice(i, 1);
+        this.dataAmount.splice(i, 1);
+        arr.forEach((_) => {
+          el.find((element, ind) => {
+            if (element.id == _.id) {
+              el.splice(ind, 1);
+              elAmount(ind, 1);
+            }
+          });
+        });
+        this.oneDimData;
+        this.oneDimDataAmount;
+        this.updatePart();
       },
-      addRow(id){
+      addRow(id) {
         let row = this.getNumOfRow() + 1;
         this.setNumOfRow(row);
-
-//gen part of data[i] + with {} + copy to obj.index
-//push data[i] to data from updateData
-
-        this.updateData(obj);
+        this.data.splice(id, 0, []);
+        let i = 0;
+        let arr = [];
+        let obj = {};
+        let ceil = {};
+        while (i < this._numOfCol) {
+          ceil = this.generateMatrixCeilData(id, i);
+          obj.id = ceil.id;
+          obj.amount = ceil.amount;
+          obj.index = this.oneDimData.length + i;
+          arr.push(obj);
+          this.data[id].push([]);
+          i++;
+        }
+        arr.forEach((_) => this.updateCeilData(_));
         this.updatePart();
       },
       ceillClick(id) {
@@ -204,10 +232,10 @@ let store = {
           }
           return obj;
         });
-        this.updateData(obj);
+        this.updateCeilData(obj);
         this.updatePart();
       },
-      updateData(a) {
+      updateCeilData(a) {
         let i = a.id.toString()[0] - 1;
         let j = a.id.toString()[1] - 1;
         let k = a.index;
@@ -228,6 +256,12 @@ let store = {
       },
     },
   },
+  getState(){
+    return this.state;
+  },
+  //_callSubscriber(){},
+  // dispatch(action){},
+  //subscribe(observer){},
 };
 // console.log(...store.state.matrix.generateMatrix());
 // console.log(...store.state.matrix.calcSum());

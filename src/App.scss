@@ -67,6 +67,7 @@
 
 .matrix-row {
   display: flex;
+  align-items: center;
 }
 
 .matrix-cell {
@@ -92,6 +93,20 @@
 
 .cell-amount {
   background-color: #61dafb75;
+}
+
+.cell-row-add{
+  background-color: rgb(83, 160, 83);
+  border:none;
+  color: inherit;
+  font: inherit;
+}
+
+.cell-row-rem{
+  background-color: rgb(196, 85, 41);
+  border:none;
+  color: inherit;
+  font: inherit;
 }
 
 .cell-average {

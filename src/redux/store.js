@@ -36,17 +36,17 @@ let store = {
       return (this._state.matrix._numOfRow = this.getRand(
         this._state.matrix._min,
         this._state.matrix._max
-        ));
-      }
-    },
-    setNumOfHiglight(num) {
-      if (num !== undefined && num > 0) {
-        return (this._state.matrix._numOfHiglight = num);
-      } else {
-        let max = (this._state.matrix._numOfCol * this._state.matrix._numOfRow)-1;
-        return (this._state.matrix._numOfHiglight = this.getRand(
-          this._state.matrix._min,
-          max
+      ));
+    }
+  },
+  setNumOfHiglight(num) {
+    if (num !== undefined && num > 0) {
+      return (this._state.matrix._numOfHiglight = num);
+    } else {
+      let max = this._state.matrix._numOfCol * this._state.matrix._numOfRow - 1;
+      return (this._state.matrix._numOfHiglight = this.getRand(
+        this._state.matrix._min,
+        max
       ));
     }
   },
@@ -76,8 +76,8 @@ let store = {
     let ceil = {};
     let min = this._state.matrix._matrixMinCeil;
     let max = this._state.matrix._matrixMaxCeil;
-    ceil.amount = this.getRand(max, min);
     ceil.id = +((a + 1).toString() + (b + 1).toString());
+    ceil.amount = this.getRand(max, min);
     return ceil;
   },
   generateMatrix(
@@ -182,7 +182,7 @@ let store = {
       closest = {};
     }
     this._state.matrix.sameX = [...arrRes];
-    debugger;
+
     return this._state.matrix.sameX;
   },
   percentOfSum() {
@@ -204,51 +204,64 @@ let store = {
     let elAmount = this._state.matrix.oneDimDataAmount;
     this._state.matrix.data.splice(i, 1);
     this._state.matrix.dataAmount.splice(i, 1);
+
     arr.forEach((_) => {
-      el.find((element, ind) => {
-        if (element.id === _.id) {
-          el.splice(ind, 1);
-          elAmount.splice(ind, 1);
-        }
-      });
+      let ind = _.id - 11;
+      el.splice(ind, 1);
+      elAmount.splice(ind, 1);
     });
+
     this.updatePart();
   },
   addRow(id) {
     let row = this.getNumOfRow() + 1;
     this.setNumOfRow(row);
-    this._state.matrix.data.splice(id, 0, []);
+    // this._state.matrix.data.splice(id, 0, []);
     let i = 0;
     let arr = [];
-    let obj = {};
-    let ceil = {};
+    let arrAmount = [];
     while (i < this._state.matrix._numOfCol) {
+      let obj = {};
+      let ceil = {};
       ceil = this.generateMatrixCeilData(id, i);
       obj.id = ceil.id;
       obj.amount = ceil.amount;
-      obj.index = this._state.matrix.oneDimData.length + i;
       arr.push(obj);
-      this._state.matrix.data[id].push([]);
+      arrAmount.push(obj.amount);
+      // obj.index = this._state.matrix.oneDimData.length + i;
+      // this._state.matrix.data[id].push([]);
+      // this._state.matrix.data[id].forEach(_=>_.push([]));
       i++;
     }
-    arr.forEach((_) => this.updateCeilData(_));
+
+    this._state.matrix.data.forEach((_, i) =>
+      i < id ? "" : _.forEach((el) => (el.id += 10))
+    );
+    this._state.matrix.data.splice(id, 0, arr);
+    this._state.matrix.dataAmount.splice(id, 0, arrAmount);
+    arr.forEach((_, i) =>
+      this._state.matrix.oneDimData.splice(id * arr.length + i, 0, _)
+    );
+    arrAmount.forEach((_, i) =>
+      this._state.matrix.oneDimDataAmount.splice(
+        id * arrAmount.length + i,
+        0,
+        _
+      )
+    );
     this.updatePart();
   },
   ceillClick(id) {
-    debugger;
     let el = this._state.matrix.oneDimData;
     let obj = {};
     el.find((element, i) => {
-      debugger;
-
       if (element.id === id) {
         obj.id = element.id;
         obj.index = i;
         obj.amount = element.amount + 1;
-        debugger;
+
         return obj;
       }
-      debugger;
 
       return obj;
     });
@@ -256,9 +269,9 @@ let store = {
     this.updatePart();
   },
   updateCeilData(a) {
-    debugger;
     let i = a.id.toString()[0] - 1;
     let j = a.id.toString()[1] - 1;
+
     let k = a.index;
     this._state.matrix.data[i][j].amount = a.amount;
     this._state.matrix.dataAmount[i][j] = a.amount;
@@ -269,6 +282,7 @@ let store = {
     this.calcSum();
     this.calcAver();
     this.percentOfSum();
+
     this._callSubscriber(this);
   },
   updateAll() {
@@ -284,9 +298,9 @@ let store = {
     console.log("ill render next time");
   },
   dispatch(action) {
-    if (action.type === "ADD-ROW") {
+    if (action.type === "ROW-ADD") {
       this.addRow(action.data);
-    }else if (action.type === "UPD-MNX") {
+    } else if (action.type === "MNX-UPD") {
       if (action.what === "m") {
         this.setNumOfCol(action.data.m);
       } else if (action.what === "n") {
@@ -294,19 +308,18 @@ let store = {
       } else if (action.what === "x") {
         this.setNumOfHiglight(action.data.x);
       }
-    }else if (action.type === "REM-ROW") {
+    } else if (action.type === "ROW-REM") {
       this.removeRow(action.data);
     } else if (action.type === "CEIL-CLICK") {
       this.ceillClick(action.data);
     } else if (action.type === "CEIL-HOVER") {
       this.findXSame(action.data);
-    }else if (action.type === "SUMM-HOVER") {
+    } else if (action.type === "SUMM-HOVER") {
       this.percentOfSum(action.data);
-    }else if (action.type === "GENERATE-MATRIX") {
-        
+    } else if (action.type === "MATRIX-GENERATE") {
       this.setInputData(action.data.m, action.data.n, action.data.x);
-    }else{
-      console.error("no action find")
+    } else {
+      console.error("no action find");
     }
   },
   subscribe(observer) {
