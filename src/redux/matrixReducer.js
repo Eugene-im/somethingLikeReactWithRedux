@@ -59,9 +59,9 @@ let initialState = {
   numOfHiglight: 3,
   _matrixMinCeil: 100,
   _matrixMaxCeil: 999,
-  sum: [303,303,303],
-  aver: [101,101,101],
-  sameX: [101,101,101],
+  sum: [303, 303, 303],
+  aver: [101, 101, 101],
+  sameX: [101, 101, 101],
 };
 
 const setInputData = (m, n, x, state) => {
@@ -101,14 +101,19 @@ const countAll = (state) => {
       );
     rowid++;
   } while (index < state.oneDimData.length);
-  Object.entries(state.aver).map(([key, el]) => Math.floor(el / state.numOfCol));
+  Object.entries(state.aver).map(([key, el]) =>
+    Math.floor(el / state.numOfCol)
+  );
 };
 const setMNX = (num, what, state) => {
+    debugger
   let setter = (a, b) => {
+    let min = state._min;
+    let max = state._max;
     if (b !== undefined && b > 2) {
       state[a] = b;
     } else {
-      state[a] = this.getRand(state._min, state._max);
+      state[a] = Math.floor(Math.random() * (max - min + 1)) + min;
     }
   };
   if (what === "m") {
@@ -167,7 +172,6 @@ const matrixReducer = (state = initialState, action) => {
       countAll(state);
       return state;
     default:
-      console.error("no action find");
       return state;
   }
 };

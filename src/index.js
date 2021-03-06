@@ -9,7 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 let renderApp = (state) => {
   // debugger;
   ReactDOM.render(
-    <App
+    <App2
       state={state}
       store={store}
       dispatch={store.dispatch.bind(store)}
