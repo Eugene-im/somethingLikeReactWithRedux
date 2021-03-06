@@ -1,6 +1,13 @@
 import MatrixCeil from "./matrixCeil";
 import React, { useState }  from "react";
-import {rowAddActionCreator,  rowRemActionCreator,  ceilClickActionCreator,  ceilHoverActionCreator,  mnxUpdActionCreator,  matrixGenActionCreator} from '../redux/store';
+import {
+  rowAddActionCreator,
+  rowRemActionCreator,
+  ceilClickActionCreator,
+  ceilHoverActionCreator,
+  mnxUpdActionCreator,
+  matrixGenActionCreator,
+} from "./redux/matrixReducer";
 
 const MatrixRow = (props) => {
   let ceil11 = React.createRef();

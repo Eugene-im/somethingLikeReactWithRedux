@@ -97,11 +97,11 @@ const countAll = (state) => {
     }
     for (let j = 0; j < col; j++)
       state.data[rowid][j].pr = Math.round(
-        (100 * state.data[rowid][j].amount) / sum[rowid]
+        (100 * state.data[rowid][j].amount) / state.sum[rowid]
       );
     rowid++;
   } while (index < state.oneDimData.length);
-  Object.entries(state.aver).map(([key, el]) => Math.floor(el / col));
+  Object.entries(state.aver).map(([key, el]) => Math.floor(el / state.numOfCol));
 };
 const setMNX = (num, what, state) => {
   let setter = (a, b) => {
@@ -130,7 +130,7 @@ const setMNX = (num, what, state) => {
 const matrixReducer = (state = initialState, action) => {
   switch (action.type) {
     case ROW_ADD:
-      state.data.splice(action.data, 0, createRow(col));
+      state.data.splice(action.data, 0, createRow(state.numOfCol));
       countAll(state);
       return state;
 
