@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const InputGroup = (props) => {
-  console.log("InputGroup ", props);
+  // console.log("InputGroup ", props);
   return (
     <div className={props.last ? "input-group last" : "input-group"}>
       <label className="input-label" htmlFor={props.htFor}>
@@ -12,7 +12,8 @@ const InputGroup = (props) => {
         name={props.htFor}
         type={props.typeOfInput}
         defaultValue={props.data}
-        onChange={(e) => props.updM({ what: "m", data: e.target.value })}
+        // value={console.log("input ", this)}
+        onChange={(e) => props.updM({ what: props.what, data: +e.target.value })}
       />
     </div>
   );

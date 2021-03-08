@@ -10,14 +10,14 @@ import {
 import AverCeil from "./averCeil";
 
 const MatrixRowAver = (props) => {
-  console.log("MatrixRowAver ", props);
+  // console.log("MatrixRowAver ", props);
   // debugger;
   const [averCeils, setAverCeils] = React.useState(props.aver);
 
   return (
     <div className={`matrix-row average-row row-${props.index}`}>
       {averCeils.map((ceil, index) => (
-        <AverCeil index={index} data={ceil} />
+        <AverCeil index={index} key={index} data={ceil} />
       ))}
     </div>
   );

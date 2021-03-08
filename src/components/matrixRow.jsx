@@ -18,7 +18,7 @@ const MatrixRow = (props) => {
   return (
     <div className="matrix-row row-1">
       {matrixCeils.map((ceil, index) => (
-        <MatrixCeil state={props} index={index} data={ceil} />
+        <MatrixCeil state={props} key={props.id} index={index} data={ceil} />
         ))}
       <SumCeil data={props.state.sum} index={props.index} />
       <ButtonCeil state={props} type='add'/>

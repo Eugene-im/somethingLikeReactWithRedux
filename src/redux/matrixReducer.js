@@ -17,7 +17,6 @@ export const ceilHoverActionCreator = (data) => ({
 });
 export const mnxUpdActionCreator = (data) => ({
   type: MNX_UPD,
-  what: data.what,
   data: data.data,
 });
 export const matrixGenActionCreator = (data) => ({
@@ -54,6 +53,8 @@ let initialState = {
     { id: "wxy", amount: 101, pr: 30, t: 0 },
     { id: "zzz", amount: 101, pr: 30, t: 0 },
   ],
+  _min: 2,
+  _max: 10,
   numOfRow: 3,
   numOfCol: 3,
   numOfHiglight: 3,
@@ -64,113 +65,126 @@ let initialState = {
   sameX: [101, 101, 101],
 };
 
-const setInputData = (m, n, x, state) => {
+const setInputData = (m, n, x, st) => {
   if (x >= m * n) {
     throw new Error("!!!!!!! x < m*n !!!!!!!");
   }
-  state.numOfCol = m;
-  state.numOfRow = n;
-  state.numOfHiglight = x;
+  st.numOfCol = m;
+  st.numOfRow = n;
+  st.numOfHiglight = x;
 };
 
 const createRow = (col) => {
-  new Array(col).fill(0).map(() => ({
+
+ return new Array(col).fill(0).map(() => ({
     id: Math.random().toString(16).substring(2, 8),
-    amount: 100 + ((Math.random() * 999) >> 0),
+    amount: 100 + ((Math.random() * 900) >> 0),
     pr: 0,
     t: 0,
   }));
+  debugger
 };
-const countAll = (state) => {
+const countAll = (st) => {
   let index = 0;
   let rowid = 0;
-  let col = state.numOfCol;
+  let col = st.numOfCol;
   do {
     for (let i = 0; i < col; i++) {
-      state.aver[i]
-        ? (state.aver[i] += state.oneDimData[index].amount || 0)
-        : (state.aver[i] = state.oneDimData[index].amount || 0);
-      state.sum[rowid]
-        ? (state.sum[rowid] += state.oneDimData[index].amount || 0)
-        : (state.sum[rowid] = state.oneDimData[index].amount || 0);
+      st.aver[i]
+        ? (st.aver[i] += st.oneDimData[index].amount || 0)
+        : (st.aver[i] = st.oneDimData[index].amount || 0);
+      st.sum[rowid]
+        ? (st.sum[rowid] += st.oneDimData[index].amount || 0)
+        : (st.sum[rowid] = st.oneDimData[index].amount || 0);
       index++;
     }
     for (let j = 0; j < col; j++)
-      state.data[rowid][j].pr = Math.round(
-        (100 * state.data[rowid][j].amount) / state.sum[rowid]
+      st.data[rowid][j].pr = Math.round(
+        (100 * st.data[rowid][j].amount) / st.sum[rowid]
       );
     rowid++;
-  } while (index < state.oneDimData.length);
-  Object.entries(state.aver).map(([key, el]) =>
-    Math.floor(el / state.numOfCol)
+  } while (index < st.oneDimData.length);
+  Object.entries(st.aver).map(([key, el]) =>
+    Math.floor(el / st.numOfCol)
   );
 };
-const setMNX = (num, what, state) => {
-    debugger
+const setMNX = (data, st) => {
   let setter = (a, b) => {
-    let min = state._min;
-    let max = state._max;
+    let min = st._min;
+    let max = st._max;
     if (b !== undefined && b > 2) {
-      state[a] = b;
+      st[a] = b;
     } else {
-      state[a] = Math.floor(Math.random() * (max - min + 1)) + min;
+      st[a] = Math.floor(Math.random() * (max - min + 1)) + min;
     }
   };
-  if (what === "m") {
-    setter("numOfCol", num);
-  } else if (what === "n") {
-    setter("numOfRow", num);
-  } else if (what === "x") {
-    if (num !== undefined && num > 0) {
-      state.matrix.numOfHiglight = num;
+  if (data.what === "m") {
+    setter("numOfCol", data.data);
+  } else if (data.what === "n") {
+    setter("numOfRow", data.data);
+  } else if (data.what === "x") {
+    if (data.data !== undefined && data.data > 0) {
+      st.numOfHiglight = data.data;
     } else {
-      let max = state.matrix.numOfCol * state.matrix.numOfRow - 1;
-      state.matrix.numOfHiglight = this.getRand(state.matrix._min, max);
+      let max = st.numOfCol * st.numOfRow - 1;
+      st.numOfHiglight = this.getRand(st._min, max);
     }
   } else {
     throw new Error("nothing to set, check action.what");
   }
+  //   return state
 };
 
 const matrixReducer = (state = initialState, action) => {
+  let stateCopy;
   switch (action.type) {
     case ROW_ADD:
-      state.data.splice(action.data, 0, createRow(state.numOfCol));
-      countAll(state);
-      return state;
+      stateCopy = { ...state };
+      stateCopy.splice(action.data, 0, createRow(stateCopy.numOfCol));
+      countAll(stateCopy);
+      return stateCopy;
 
     case ROW_REM:
-      state.data.splice(action.data, 1);
-      countAll(state);
-      return state;
+      stateCopy = { ...state };
+      stateCopy.data.splice(action.data, 1);
+      countAll(stateCopy);
+      return stateCopy;
+
     case MNX_UPD:
-      setMNX(action.data, action.what);
-      return state;
+      stateCopy = { ...state };
+      setMNX(action.data, stateCopy);
+      return stateCopy;
 
     case CEIL_CLICK:
-      state.matrix.oneDimData.find((el) =>
+      stateCopy = { ...stateCopy };
+      stateCopy.matrix.oneDimData.find((el) =>
         el.id === action.data ? (el.amount += 1) : ""
       );
-      countAll(state);
-      return state;
+      countAll(stateCopy);
+      return stateCopy;
+
     case CEIL_HOVER:
-      state.sameX = state.data
+      stateCopy = { ...state };
+      stateCopy.sameX = stateCopy.data
         .slice()
         .filter((el) => el.amount != action.data)
         .map((el) =>
           Object.assign(el, { t: Math.abs(el.amount - action.data) })
         )
         .sort((a, b) => a.t - b.t)
-        .slice(state.numOfHiglight);
-      return state;
+        .slice(stateCopy.numOfHiglight);
+      return stateCopy;
+
     case MATRIX_GENERATE:
-      setInputData(action.data.m, action.data.n, action.data.x, state);
-      state.data = new Array(action.data.n)
+      stateCopy = { ...state };
+      setInputData(action.data.m, action.data.n, action.data.x, stateCopy);
+      stateCopy.data = new Array(action.data.n)
         .fill(0)
         .map(() => createRow(action.data.m));
-      state.oneDimData = state.data.flat();
-      countAll(state);
-      return state;
+      stateCopy.oneDimData = stateCopy.data.flat();
+      countAll(stateCopy);
+      return stateCopy;
+
     default:
       return state;
   }
