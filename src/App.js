@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   rowAddActionCreator,
   rowRemActionCreator,
@@ -14,8 +14,8 @@ import InputGroup from "./components/inputGroup";
 
 const App = (props) => {
   console.log("APP2 props", props);
-  // const [rows, setRows] = React.useState(props.data);
-
+  const [rows, setRows] = React.useState(props.data);
+  useEffect(() => setRows(props.data), [props.data]);
   // const set = ()=>{
   //   const [rows, setRows] = React.useState(props.data);
   //   return (
@@ -33,7 +33,7 @@ const App = (props) => {
   const hendler = () => {
     props.generateMatrix(props.matrixPage.numOfCol, props.matrixPage.numOfRow, props.matrixPage.numOfHiglight);
     setVisible(true);
-    // setRows(props.data);
+    setRows(props.data);
   }
   // const [inputM, setInputM] = useState(props.numOfCol);
 
@@ -80,7 +80,7 @@ const App = (props) => {
           {visible && (
             <div className="output-matrix matrix">
               {/* {visible ? set():''} */}
-              {props.data.map((row, index) => (
+              {rows.map((row, index) => (
                 <MatrixRow
                   row={row}
                   index={index}
