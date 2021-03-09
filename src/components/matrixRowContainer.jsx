@@ -1,16 +1,16 @@
-import App from "./App";
+import MatrixRow from "./matrixRow";
 import {
-  rowAddActionCreator,
-  rowRemActionCreator,
-  ceilClickActionCreator,
-  ceilHoverActionCreator,
-  mnxUpdActionCreator,
-  matrixGenActionCreator,
-} from "./redux/matrixReducer";
+    rowAddActionCreator,
+    rowRemActionCreator,
+    ceilClickActionCreator,
+    ceilHoverActionCreator,
+    mnxUpdActionCreator,
+    matrixGenActionCreator,
+  } from "../redux/matrixReducer";
 import { connect } from "react-redux";
 
-
 const mapStateToProps = (state) => {
+    // debugger
   return {
     matrixPage: state.matrixPage,
     data: state.matrixPage.data,
@@ -18,18 +18,10 @@ const mapStateToProps = (state) => {
     numOfCol: state.matrixPage.numOfCol,
     numOfRow: state.matrixPage.numOfRow,
     numOfHiglight: state.matrixPage.numOfHiglight,
-    sum: state.matrixPage.sum,
-    aver: state.matrixPage.aver,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    updM: (data) => {
-      dispatch(mnxUpdActionCreator({ what: "m", data: data }));
-    },
-    generateMatrix: (m,n,x) => {
-      dispatch(matrixGenActionCreator({ m, n, x }));
-    },
     rowAdd: (data) => {
       dispatch(rowAddActionCreator(data));
     },
@@ -48,7 +40,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+const MatrixRowContainer = connect(mapStateToProps, mapDispatchToProps)(MatrixRow);
 
-const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
-
-export default AppContainer;
+export default MatrixRowContainer;

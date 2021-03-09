@@ -14,10 +14,26 @@ import InputGroup from "./components/inputGroup";
 
 const App = (props) => {
   console.log("APP2 props", props);
-  const [rows, setRows] = React.useState(props.data);
+  // const [rows, setRows] = React.useState(props.data);
+
+  // const set = ()=>{
+  //   const [rows, setRows] = React.useState(props.data);
+  //   return (
+  //     rows.map((row, index) => (
+  //       <MatrixRow
+  //         row={row}
+  //         index={index}
+  //         key={index}
+  //         state={props.matrixPage}
+  //       />
+  //     ))
+  //   )
+  // };
+  const [visible, setVisible] = React.useState(false);
   const hendler = () => {
-    props.generateMatrix(props.matrixPage.numOfCol,props.matrixPage.numOfRow,props.matrixPage.numOfHiglight);
-    setRows(props.data);
+    props.generateMatrix(props.matrixPage.numOfCol, props.matrixPage.numOfRow, props.matrixPage.numOfHiglight);
+    setVisible(true);
+    // setRows(props.data);
   }
   // const [inputM, setInputM] = useState(props.numOfCol);
 
@@ -58,23 +74,26 @@ const App = (props) => {
             data={props.matrixPage.numOfHiglight}
             updM={props.updM}
           />
-          <button className="input-button" onClick={()=>hendler()}>Generate matrix</button>
+          <button className="input-button" onClick={() => hendler()}>Generate matrix</button>
         </div>
         <div className="app-output">
-          <div className="output-matrix matrix">
-            {rows.map((row, index) => (
-              <MatrixRow
-                row={row}
-                index={index}
-                key={index}
-                state={props.matrixPage}
+          {visible && (
+            <div className="output-matrix matrix">
+              {/* {visible ? set():''} */}
+              {props.data.map((row, index) => (
+                <MatrixRow
+                  row={row}
+                  index={index}
+                  key={index}
+                  state={props.matrixPage}
+                />
+              ))}
+              <MatrixRowAver
+                index={props.matrixPage.numOfCol + 1}
+                aver={props.matrixPage.aver}
               />
-            ))}
-            <MatrixRowAver
-              index={props.matrixPage.numOfCol + 1}
-              aver={props.matrixPage.aver}
-            />
-          </div>
+            </div>
+          )}
         </div>
       </main>
       <footer className="App-footer">
