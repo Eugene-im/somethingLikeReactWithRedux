@@ -184,10 +184,10 @@ const countAll = (st) => {
   st.aver = [];
   do {
     for (let i = 0; i < col; i++) {
-      st.aver[i] ?
+      st.aver[i] === undefined ?
         (st.aver[i] += st.oneDimData[index].amount || 0) :
         (st.aver[i] = st.oneDimData[index].amount || 0);
-      st.sum[rowid] ?
+      st.sum[rowid] === undefined ?
         (st.sum[rowid] += st.oneDimData[index].amount || 0) :
         (st.sum[rowid] = st.oneDimData[index].amount || 0);
       index++;
@@ -238,7 +238,7 @@ const matrixReducer = (state = initialState, action) => {
       stateCopy = {
         ...state
       };
-      stateCopy.splice(action.data, 0, createRow(stateCopy.numOfCol));
+      stateCopy.data.splice(action.data, 0, createRow(stateCopy.numOfCol));
       countAll(stateCopy);
       return stateCopy;
 

@@ -3,7 +3,6 @@ import AverCeil from "./averCeil";
 
 const MatrixRowAver = (props) => {
   // console.log("MatrixRowAver ", props);
-  // debugger;
   const [averCeils, setAverCeils] = React.useState(props.aver);
   useEffect(()=>setAverCeils(props.aver),[props.aver])
 

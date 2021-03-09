@@ -1,12 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  rowAddActionCreator,
-  rowRemActionCreator,
-  ceilClickActionCreator,
-  ceilHoverActionCreator,
-  mnxUpdActionCreator,
-  matrixGenActionCreator,
-} from "./redux/matrixReducer";
 import "./App.scss";
 import MatrixRow from "./components/matrixRow";
 import MatrixRowAver from "./components/matrixRowAver";
@@ -15,27 +7,16 @@ import InputGroup from "./components/inputGroup";
 const App = (props) => {
   console.log("APP2 props", props);
   const [rows, setRows] = React.useState(props.data);
-  useEffect(() => setRows(props.data), [props.data]);
-  // const set = ()=>{
-  //   const [rows, setRows] = React.useState(props.data);
-  //   return (
-  //     rows.map((row, index) => (
-  //       <MatrixRow
-  //         row={row}
-  //         index={index}
-  //         key={index}
-  //         state={props.matrixPage}
-  //       />
-  //     ))
-  //   )
-  // };
   const [visible, setVisible] = React.useState(false);
-  const hendler = () => {
-    props.generateMatrix(props.matrixPage.numOfCol, props.matrixPage.numOfRow, props.matrixPage.numOfHiglight);
+  useEffect(() => setRows(props.data), [props.data]);
+  const handler = () => {
+    props.generateMatrix(
+      props.matrixPage.numOfCol,
+      props.matrixPage.numOfRow,
+      props.matrixPage.numOfHiglight
+    );
     setVisible(true);
-    setRows(props.data);
-  }
-  // const [inputM, setInputM] = useState(props.numOfCol);
+  };
 
   return (
     <div className="App">
@@ -74,31 +55,32 @@ const App = (props) => {
             data={props.matrixPage.numOfHiglight}
             updM={props.updM}
           />
-          <button className="input-button" onClick={() => hendler()}>Generate matrix</button>
+          <button className="input-button" onClick={() => handler()}>
+            Generate matrix
+          </button>
         </div>
         <div className="app-output">
-          {visible && (
-            <div className="output-matrix matrix">
-              {/* {visible ? set():''} */}
-              {rows.map((row, index) => (
-                <MatrixRow
-                  row={row}
-                  index={index}
-                  key={index}
-                  state={props.matrixPage}
-                />
-              ))}
-              <MatrixRowAver
-                index={props.matrixPage.numOfCol + 1}
-                aver={props.matrixPage.aver}
+          {/* {visible && ( */}
+          <div className="output-matrix matrix">
+            {rows.map((row, index) => (
+              <MatrixRow
+                row={row}
+                index={index}
+                key={index}
+                state={props.matrixPage}
+                rowAdd={props.rowAdd}
+                rowRem={props.rowRem}
               />
-            </div>
-          )}
+            ))}
+            <MatrixRowAver
+              index={props.matrixPage.numOfCol + 1}
+              aver={props.matrixPage.aver}
+            />
+          </div>
+          {/* )} */}
         </div>
       </main>
-      <footer className="App-footer">
-        {/* <a href="http://" target="_blank" rel="noopener noreferrer">send notes</a> */}
-      </footer>
+      <footer className="App-footer"></footer>
     </div>
   );
 };
