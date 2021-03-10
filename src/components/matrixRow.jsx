@@ -8,11 +8,11 @@ const MatrixRow = (props) => {
   return (
     <div className={`matrix-row row-${props.index}`}>
       {props.row.map((ceil, index) => (
-        <MatrixCeil state={props} key={props.id}  index={index} data={ceil} />
-      ))} 
-      <SumCeil data={props.state.sum} index={props.index} />
-      <ButtonCeil state={props} type='add'/>
-      <ButtonCeil state={props} type='rem'/>
+        <MatrixCeil state={props} key={ceil.id} matrixIndex={props.index.toString() + (index + 1).toString()} data={ceil} />
+      ))}
+      <SumCeil data={props.state.sum} state={props} index={props.index} />
+      <ButtonCeil state={props} dataid={props.index} type='add' />
+      <ButtonCeil state={props} dataid={props.index} type='rem' />
     </div>
   );
 };

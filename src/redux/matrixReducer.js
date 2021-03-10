@@ -2,6 +2,7 @@ const ROW_ADD = "ROW-ADD";
 const ROW_REM = "ROW-REM";
 const CEIL_CLICK = "CEIL-CLICK";
 const CEIL_HOVER = "CEIL-HOVER";
+const SUM_HOVER = "SUM-HOVER";
 const MNX_UPD = "MNX-UPD";
 const MATRIX_GENERATE = "MATRIX-GENERATE";
 
@@ -21,6 +22,10 @@ export const ceilHoverActionCreator = (data) => ({
   type: CEIL_HOVER,
   data: data,
 });
+export const sumHoverActionCreator = (data) => ({
+  type: SUM_HOVER,
+  data: data,
+});
 export const mnxUpdActionCreator = (data) => ({
   type: MNX_UPD,
   data: data.data,
@@ -31,6 +36,10 @@ export const matrixGenActionCreator = (data) => ({
 });
 
 let initialState = {
+  sumHoverData: {
+    hover: false,
+    rowId: ''
+  },
   data: [
     [{
         id: "abc",
@@ -180,16 +189,11 @@ const countAll = (st) => {
   let index = 0;
   let rowid = 0;
   let col = st.numOfCol;
-  st.sum = [];
-  st.aver = [];
+  st.aver = new Array(col).fill(0);
   do {
     for (let i = 0; i < col; i++) {
-      st.aver[i] === undefined ?
-        (st.aver[i] += st.oneDimData[index].amount || 0) :
-        (st.aver[i] = st.oneDimData[index].amount || 0);
-      st.sum[rowid] === undefined ?
-        (st.sum[rowid] += st.oneDimData[index].amount || 0) :
-        (st.sum[rowid] = st.oneDimData[index].amount || 0);
+      st.aver[i] += st.dataOneDim[index].amount;
+      i === 0 ? st.sum[rowid] = st.dataOneDim[index].amount : st.sum[rowid] += st.dataOneDim[index].amount;
       index++;
     }
     for (let j = 0; j < col; j++)
@@ -197,19 +201,19 @@ const countAll = (st) => {
         (100 * st.data[rowid][j].amount) / st.sum[rowid]
       );
     rowid++;
-  } while (index < st.oneDimData.length);
-  Object.entries(st.aver).map(([key, el]) =>
-    Math.floor(el / st.numOfCol)
-  );
+  } while (index < st.dataOneDim.length);
+  st.aver = [...(st.aver.map((el) =>
+    Math.floor(el / st.numOfRow)
+  ))];
   return st;
 };
 const setMNX = (data, st) => {
   let setter = (a, b) => {
-    let min = st._min;
-    let max = st._max;
-    if (b !== undefined && b > 2) {
+    if (b !== undefined && b >= 2) {
       st[a] = b;
     } else {
+      let min = st._min;
+      let max = st.numOfCol * st.numOfRow - 1;
       st[a] = Math.floor(Math.random() * (max - min + 1)) + min;
     }
   };
@@ -218,12 +222,7 @@ const setMNX = (data, st) => {
   } else if (data.what === "n") {
     setter("numOfRow", data.data);
   } else if (data.what === "x") {
-    if (data.data !== undefined && data.data > 0) {
-      st.numOfHiglight = data.data;
-    } else {
-      let max = st.numOfCol * st.numOfRow - 1;
-      st.numOfHiglight = this.getRand(st._min, max);
-    }
+    setter("numOfHiglight", data.data);
   } else {
     throw new Error("nothing to set, check action.what");
   }
@@ -231,7 +230,7 @@ const setMNX = (data, st) => {
 };
 
 const matrixReducer = (state = initialState, action) => {
-// const matrixReducer = (state = '', action) => {
+  // const matrixReducer = (state = '', action) => {
   let stateCopy;
   switch (action.type) {
     case ROW_ADD:
@@ -239,6 +238,7 @@ const matrixReducer = (state = initialState, action) => {
         ...state
       };
       stateCopy.data.splice(action.data, 0, createRow(stateCopy.numOfCol));
+      stateCopy.numOfRow += 1;
       countAll(stateCopy);
       return stateCopy;
 
@@ -247,6 +247,7 @@ const matrixReducer = (state = initialState, action) => {
         ...state
       };
       stateCopy.data.splice(action.data, 1);
+      stateCopy.numOfRow -= 1;
       countAll(stateCopy);
       return stateCopy;
 
@@ -259,9 +260,9 @@ const matrixReducer = (state = initialState, action) => {
 
     case CEIL_CLICK:
       stateCopy = {
-        ...stateCopy
+        ...state
       };
-      stateCopy.matrix.oneDimData.find((el) =>
+      stateCopy.dataOneDim.find((el) =>
         el.id === action.data ? (el.amount += 1) : ""
       );
       countAll(stateCopy);
@@ -271,7 +272,7 @@ const matrixReducer = (state = initialState, action) => {
       stateCopy = {
         ...state
       };
-      stateCopy.sameX = stateCopy.data
+      stateCopy.sameX = [...(stateCopy.data
         .slice()
         .filter((el) => el.amount !== action.data)
         .map((el) =>
@@ -280,7 +281,15 @@ const matrixReducer = (state = initialState, action) => {
           })
         )
         .sort((a, b) => a.t - b.t)
-        .slice(stateCopy.numOfHiglight);
+        .slice(stateCopy.numOfHiglight))];
+      return stateCopy;
+
+    case SUM_HOVER:
+      stateCopy = {
+        ...state
+      };
+      stateCopy.sumHoverData.hover = true;
+      stateCopy.sumHoverData.rowId = action.data;
       return stateCopy;
 
     case MATRIX_GENERATE:
@@ -290,7 +299,7 @@ const matrixReducer = (state = initialState, action) => {
       stateCopy.data = new Array(action.data.n)
         .fill(0)
         .map(() => createRow(action.data.m));
-      stateCopy.oneDimData = stateCopy.data.flat();
+      stateCopy.dataOneDim = stateCopy.data.flat();
       countAll(stateCopy);
       return stateCopy;
 

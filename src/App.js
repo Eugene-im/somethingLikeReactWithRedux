@@ -60,7 +60,7 @@ const App = (props) => {
           </button>
         </div>
         <div className="app-output">
-          {/* {visible && ( */}
+          {visible && (
           <div className="output-matrix matrix">
             {rows.map((row, index) => (
               <MatrixRow
@@ -70,6 +70,7 @@ const App = (props) => {
                 state={props.matrixPage}
                 rowAdd={props.rowAdd}
                 rowRem={props.rowRem}
+                state={props}
               />
             ))}
             <MatrixRowAver
@@ -77,7 +78,7 @@ const App = (props) => {
               aver={props.matrixPage.aver}
             />
           </div>
-          {/* )} */}
+           )}
         </div>
       </main>
       <footer className="App-footer"></footer>

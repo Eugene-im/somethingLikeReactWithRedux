@@ -4,6 +4,7 @@ import {
   rowRemActionCreator,
   ceilClickActionCreator,
   ceilHoverActionCreator,
+  sumHoverActionCreator,
   mnxUpdActionCreator,
   matrixGenActionCreator,
 } from "./redux/matrixReducer";
@@ -20,6 +21,7 @@ const mapStateToProps = (state) => {
     numOfHiglight: state.matrixPage.numOfHiglight,
     sum: state.matrixPage.sum,
     aver: state.matrixPage.aver,
+    sumHoverData: state.matrixPage.sumHoverData,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -43,8 +45,8 @@ const mapDispatchToProps = (dispatch) => {
     //   ceil.amount = +ceil11.current.innerText;
       dispatch(ceilHoverActionCreator(data));
     },
-    sumHover: () => {
-      console.log("need only to view");
+    sumHover: (data) => {
+      dispatch(sumHoverActionCreator(data));
     },
   };
 };
