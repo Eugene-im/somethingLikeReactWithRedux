@@ -3,6 +3,16 @@ import "./App.scss";
 import MatrixRow from "./components/matrixRow";
 import MatrixRowAver from "./components/matrixRowAver";
 import InputGroup from "./components/inputGroup";
+import {
+  rowAddActionCreator,
+  rowRemActionCreator,
+  ceilClickActionCreator,
+  ceilHoverActionCreator,
+  sumHoverActionCreator,
+  mnxUpdActionCreator,
+  matrixGenActionCreator,
+} from "./redux/matrixReducer";
+import { connect } from "react-redux";
 
 const App = (props) => {
   console.log("APP2 props", props);
@@ -32,8 +42,8 @@ const App = (props) => {
             htFor="col"
             what="m"
             last={false}
-            data={props.matrixPage.numOfCol}
-            updM={props.updM}
+            data={props.numOfCol}
+            // updM={props.updM}
           />
           <InputGroup
             state={props}
@@ -42,8 +52,8 @@ const App = (props) => {
             what="n"
             htFor="row"
             last={false}
-            data={props.matrixPage.numOfRow}
-            updM={props.updM}
+            data={props.numOfRow}
+            // updM={props.updM}
           />
           <InputGroup
             state={props}
@@ -52,8 +62,8 @@ const App = (props) => {
             htFor="light"
             what="x"
             last={true}
-            data={props.matrixPage.numOfHiglight}
-            updM={props.updM}
+            data={props.numOfHiglight}
+            // updM={props.updM}
           />
           <button className="input-button" onClick={() => handler()}>
             Generate matrix
@@ -86,4 +96,55 @@ const App = (props) => {
   );
 };
 
-export default App;
+
+const mapStateToProps = (state) => {
+  return {
+    // matrixPage: state.matrixPage,
+    data: state.matrixPage.data,
+    dataOneDim: state.matrixPage.oneDimData,
+    numOfCol: state.matrixPage.numOfCol,
+    numOfRow: state.matrixPage.numOfRow,
+    numOfHiglight: state.matrixPage.numOfHiglight,
+    sum: state.matrixPage.sum,
+    aver: state.matrixPage.aver,
+    sumHoverData: state.matrixPage.sumHoverData,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updM: (data) => {
+      dispatch(mnxUpdActionCreator({ what: "m", data: data }));
+    },
+    generateMatrix: (m,n,x) => {
+      dispatch(matrixGenActionCreator({ m, n, x }));
+    },
+    rowAdd: (data) => {
+      dispatch(rowAddActionCreator(data));
+    },
+    rowRem: (data) => {
+      dispatch(rowRemActionCreator(data));
+    },
+    ceilClick: (data) => {
+      dispatch(ceilClickActionCreator(data));
+    },
+    ceilHover: (data) => {
+    //   ceil.amount = +ceil11.current.innerText;
+      dispatch(ceilHoverActionCreator(data));
+    },
+    sumHover: (data) => {
+      dispatch(sumHoverActionCreator(data));
+    },
+  };
+};
+
+// const mapDispatchToProps = {
+//   mnxUpdActionCreator,
+//   matrixGenActionCreator,
+//   rowAddActionCreator,
+//   rowRemActionCreator,
+//   ceilClickActionCreator,
+//   ceilHoverActionCreator,
+//   sumHoverActionCreator
+// }
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
