@@ -174,16 +174,6 @@ let initialState = {
   sameX: [0,0,0],
 };
 
-const setInputData = (m, n, x, st) => {
-  if (x >= m * n) {
-    throw new Error("!!!!!!! x < m*n !!!!!!!");
-  }
-  st.numOfCol = m;
-  st.numOfRow = n;
-  st.numOfHiglight = x;
-  return st;
-};
-
 const createRow = (col) => {
 
   return new Array(col).fill(0).map(() => ({
@@ -230,6 +220,7 @@ const setMNX = (data, st) => {
   } else if (data.what === "n") {
     setter("numOfRow", data.data);
   } else if (data.what === "x") {
+    data.data < (st.numOfCol * st.numOfRow - 1) ? data.data = data.data : data.data = 3;
     setter("numOfHiglight", data.data);
   } else {
     throw new Error("nothing to set, check action.what");
@@ -238,7 +229,6 @@ const setMNX = (data, st) => {
 };
 
 const matrixReducer = (state = initialState, action) => {
-  // const matrixReducer = (state = '', action) => {
   let stateCopy;
   switch (action.type) {
     case ROW_ADD:

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.scss";
 import MatrixRow from "./components/matrixRow";
 import MatrixRowAver from "./components/matrixRowAver";
@@ -11,8 +11,6 @@ import { connect } from "react-redux";
 
 const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
   console.log("APP data ", data);
-  // const [rows, setRows] = React.useState(data);
-  // useEffect(() => setRows(data), [data]);
   const [visible, setVisible] = React.useState(false);
   const handler = () => {
     generateMatrix(
@@ -56,7 +54,7 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
           </button>
         </div>
         <div className="app-output">
-          {/* {visible && ( */}
+          {visible && (
             <div className="output-matrix matrix">
               {data.map((row, index) => (
                 <MatrixRow
@@ -69,7 +67,7 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
                 index={numOfCol + 1}
               />
             </div>
-          {/* )} */}
+          )}
         </div>
       </main>
       <footer className="App-footer"></footer>

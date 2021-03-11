@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MatrixCeil from "./matrixCeil";
 import SumCeil from "./sumCeil";
 import ButtonCeil from "./buttonCeil";
 import { connect } from "react-redux";
 
 const MatrixRow = ({ index, sum, row }) => {
-  console.log("MatrixRow ROW", row);
-  // const [rowData,setRow]=React.useState(row);
-  // useEffect(()=>setRow(row),[row]);
   return (
     <div className={`matrix-row row-${index}`}>
       {row.map((ceil, i) => (

@@ -6,7 +6,6 @@ import {
 import { connect } from "react-redux";
 
 const ButtonCeil = ({ rowAdd, rowRem, type, dataid, index }) => {
-  // console.log('ButtonCeil ',props);
   const handler = (e) => {
     if (type === "add") {
       rowAdd(+e.target.attributes.dataid.value);
@@ -17,7 +16,6 @@ const ButtonCeil = ({ rowAdd, rowRem, type, dataid, index }) => {
   return (
     <button
       onClick={(e) => handler(e)}
-      // key={index}
       dataid={dataid}
       className={`matrix-cell cell-row-${type === "add" ? "add" : "rem"}`}
     >

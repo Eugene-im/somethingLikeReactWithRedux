@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   mnxUpdActionCreator,
 } from '../redux/matrixReducer';
 import { connect } from "react-redux";
 
 const InputGroup = ({ last, whatData, htFor, label, typeOfInput, updM, numOfCol, numOfRow, numOfHiglight }) => {
-  // console.log("InputGroup ", whatData);
   const checkWhat = (whatData) => {
     switch (whatData) {
       case "m":
@@ -27,7 +26,6 @@ const InputGroup = ({ last, whatData, htFor, label, typeOfInput, updM, numOfCol,
         className="input-item"
         name={htFor}
         type={typeOfInput}
-        // defaultValue={checkWhat(whatData)}
         value={checkWhat(whatData)}
         onChange={(e) => updM({ what: whatData, data: +e.target.value })}
       />

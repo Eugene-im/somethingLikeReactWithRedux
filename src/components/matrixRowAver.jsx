@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AverCeil from "./averCeil";
 import { connect } from "react-redux";
 
 const MatrixRowAver = ({index,aver}) => {
-  // console.log("MatrixRowAver ", props);
-  // const [averCeils, setAverCeils] = React.useState(props.aver);
-  // useEffect(()=>setAverCeils(props.aver),[props.aver])
-
   return (
     <div key={index} className={`matrix-row average-row row-${index}`}>
       {aver.map((ceil, index) => (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   ceilClickActionCreator,
   ceilHoverActionCreator,
@@ -7,11 +7,6 @@ import {
 import { connect } from "react-redux";
 
 const MatrixCeil = ({ ceilClick, ceilHover, ceilUnHover, data, matrixIndex, index, sumHoverData, sameX }) => {
-  // console.log("matrixceil sumHoverData", sumHoverData);
-  console.log("matrixceil sameX", sameX);
-  // const checkVis = () => (sumHoverData.hover === 'true') ? (sumHoverData.id === index) ? 'visible' : '' : '';
-  // let [visible, setVisible] = React.useState(sumHoverData);
-  // useEffect(() => setVisible((sumHoverData === index)),[sumHoverData]);
   const handler = (e) => {
     if (e.type === 'click') {
       ceilClick(e.target.id)
