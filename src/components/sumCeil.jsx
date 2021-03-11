@@ -6,8 +6,6 @@ import {
 import { connect } from "react-redux";
 
 const SumCeil = ({ sumHover, sumUnHover, index, sum }) => {
-  console.log("SumCeil ", sum);
-  console.log("SumCeil ", index);
   const handler = (e) => {
     if (e.type === 'mouseenter') {
       sumHover(+e.target.attributes.dataid.value);

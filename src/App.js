@@ -10,7 +10,6 @@ import {
 import { connect } from "react-redux";
 
 const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
-  console.log("APP data ", data);
   const [visible, setVisible] = React.useState(false);
   const handler = () => {
     generateMatrix(
@@ -82,9 +81,6 @@ const mapStateToProps = (state) => {
     numOfCol: state.matrixPage.numOfCol,
     numOfRow: state.matrixPage.numOfRow,
     numOfHiglight: state.matrixPage.numOfHiglight,
-    sum: state.matrixPage.sum,
-    aver: state.matrixPage.aver,
-    sumHoverData: state.matrixPage.sumHoverData,
   };
 };
 const mapDispatchToProps = (dispatch) => {

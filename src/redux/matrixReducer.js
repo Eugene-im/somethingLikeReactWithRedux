@@ -220,8 +220,8 @@ const setMNX = (data, st) => {
   } else if (data.what === "n") {
     setter("numOfRow", data.data);
   } else if (data.what === "x") {
-    data.data = data.data > (st.numOfCol * st.numOfRow - 1) ? '' : 3;
-    setter("numOfHiglight", data.data);
+    let x = data.data > (st.numOfCol * st.numOfRow - 1) ? 3 : data.data;
+    setter("numOfHiglight", x);
   } else {
     throw new Error("nothing to set, check action.what");
   }
