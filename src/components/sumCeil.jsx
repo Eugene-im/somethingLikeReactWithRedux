@@ -1,12 +1,30 @@
 import React from "react";
+import {
+  sumHoverActionCreator,
+} from "../redux/matrixReducer";
+import { connect } from "react-redux";
 
-const SumCeil = (props) => {
-  console.log("SumCeil ", props);
+const SumCeil = ({sumHover,index,sum}) => {
+  // console.log("SumCeil ", props);
   const handler = (e) =>{
-    props.state.state.sumHover(+e.target.attributes.dataid.value);
+    sumHover(+e.target.attributes.dataid.value);
   }
   return (
-    <div onMouseOver={(e)=>handler(e)} dataid={props.index} className="matrix-cell cell-amount">{props.data[props.index]}</div>
+    <div onMouseOver={(e)=>handler(e)} dataid={index} className="matrix-cell cell-amount">{sum[index]}</div>
   );
 };
-export default SumCeil;
+
+const mapStateToProps = (state) => {
+  return {
+    sum: state.matrixPage.sum,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sumHover: (data) => {
+      dispatch(sumHoverActionCreator(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SumCeil);

@@ -1,23 +1,44 @@
 import React from "react";
+import {
+  rowAddActionCreator,
+  rowRemActionCreator,
+} from "../redux/matrixReducer";
+import { connect } from "react-redux";
 
-const ButtonCeil = (props) => {
-  console.log('ButtonCeil ',props);
+const ButtonCeil = ({ rowAdd, rowRem, type, dataid, index }) => {
+  // console.log('ButtonCeil ',props);
   const handler = (e) => {
-    if (props.type === "add"){
-      props.state.rowAdd(+e.target.attributes.dataid.value);
-    } else if (props.type === "rem") {
-      props.state.rowRem(+e.target.attributes.dataid.value);
+    if (type === "add") {
+      rowAdd(+e.target.attributes.dataid.value);
+    } else if (type === "rem") {
+      rowRem(+e.target.attributes.dataid.value);
     }
   };
   return (
     <button
       onClick={(e) => handler(e)}
-      // key={props.index}
-      dataid={props.dataid}
-      className={`matrix-cell cell-row-${props.type === "add" ? "add" : "rem"}`}
+      // key={index}
+      dataid={dataid}
+      className={`matrix-cell cell-row-${type === "add" ? "add" : "rem"}`}
     >
-      {props.type === "add" ? "+" : "-"}
+      {type === "add" ? "+" : "-"}
     </button>
   );
 };
-export default ButtonCeil;
+
+const mapStateToProps = (state) => {
+  return {
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    rowAdd: (data) => {
+      dispatch(rowAddActionCreator(data));
+    },
+    rowRem: (data) => {
+      dispatch(rowRemActionCreator(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ButtonCeil);

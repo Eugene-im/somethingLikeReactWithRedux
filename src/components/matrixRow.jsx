@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MatrixCeil from "./matrixCeil";
 import SumCeil from "./sumCeil";
 import ButtonCeil from "./buttonCeil";
+import { connect } from "react-redux";
 
-const MatrixRow = (props) => {
-  console.log("MatrixRow ", props);
+const MatrixRow = ({ index, sum, row }) => {
+  console.log("MatrixRow ROW", row);
+  // const [rowData,setRow]=React.useState(row);
+  // useEffect(()=>setRow(row),[row]);
   return (
-    <div className={`matrix-row row-${props.index}`}>
-      {props.row.map((ceil, index) => (
-        <MatrixCeil state={props} key={ceil.id} matrixIndex={props.index.toString() + (index + 1).toString()} data={ceil} />
+    <div className={`matrix-row row-${index}`}>
+      {row.map((ceil, i) => (
+        <MatrixCeil key={ceil.id} matrixIndex={index.toString() + (i + 1).toString()} data={ceil} />
       ))}
-      <SumCeil data={props.state.sum} state={props} index={props.index} />
-      <ButtonCeil state={props} dataid={props.index} type='add' />
-      <ButtonCeil state={props} dataid={props.index} type='rem' />
+      <SumCeil index={index} />
+      <ButtonCeil dataid={index} type='add' />
+      <ButtonCeil dataid={index} type='rem' />
     </div>
   );
 };
 
-export default MatrixRow;
+const mapStateToProps = (state) => {
+  return {
+    sum: state.matrixPage.sum,
+    // data: state.matrixPage.data,
+  };
+};
+
+export default connect(mapStateToProps, null)(MatrixRow);

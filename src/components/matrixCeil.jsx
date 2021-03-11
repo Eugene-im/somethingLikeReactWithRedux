@@ -1,26 +1,48 @@
 import React from "react";
+import {
+  ceilClickActionCreator,
+  ceilHoverActionCreator,
+} from "../redux/matrixReducer";
+import { connect } from "react-redux";
 
-const MatrixCeil = (props) => {
-  console.log("matrixceil ", props);
+const MatrixCeil = ({ ceilClick, ceilHover, data, matrixIndex, index, sumHoverData }) => {
+  console.log("matrixceil ceilData", data);
   const handler = (e) => {
     if (e.type === 'click') {
-      props.state.state.ceilClick(e.target.id)
+      ceilClick(e.target.id)
     } else if (e.type === 'mouseover') {
-      props.state.state.ceilHover(+e.target.innerText)
+      ceilHover(+e.target.innerText)
     }
   }
   return (
     <div
-      id={props.data.id}
-      key={props.data.id}
+      id={data.id}
+      key={data.id}
       onClick={(e) => handler(e)}
       onMouseOver={(e) => handler(e)}
-      className={`matrix-cell cell-item cell-${props.matrixIndex}`}>
-      {props.data.amount}
-      {/* {props.state.sate.sumHoverData.hover === 'true' && (props.state.sate.sumHoverData.id === props.state.index) && (
-        <div className="cell-item-hover">{props.data.pr}</div>
-      )} */}
+      className={`matrix-cell cell-item cell-${matrixIndex}`}>
+      {data.amount}
+      {sumHoverData.hover === 'true' && (sumHoverData.id === index) && (
+        <div className="cell-item-hover">{data.pr}</div>
+      )}
     </div>
   );
 };
-export default MatrixCeil;
+
+const mapStateToProps = (state) => {
+  return {
+    sumHoverData: state.matrixPage.sumHoverData,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ceilClick: (data) => {
+      dispatch(ceilClickActionCreator(data));
+    },
+    ceilHover: (data) => {
+      dispatch(ceilHoverActionCreator(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MatrixCeil);
