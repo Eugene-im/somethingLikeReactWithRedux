@@ -23,7 +23,10 @@
   flex-wrap: wrap;
   max-width: 500px;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+}
+.app-output{
+  margin-bottom: 25px;
 }
 
 .input-group {
@@ -86,6 +89,7 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  flex: 0 1 14%;
 }
 
 .cell-item {
@@ -134,22 +138,22 @@
   color: #61dafb;
 }
 
-/* .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@media (max-width: 900px) {
+  .App {
+    width: 100%;
+    overflow-x: scroll;
+  }
+
+  .App-main {
+    max-width: 90vw;
+    width: 100%;
+    overflow: scroll;
+    align-items: initial;
+  }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media (max-width: 900px) and (orientation:landscape) {
+  .App-main {
+    align-items: center;
   }
-} 
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
+}
