@@ -11,15 +11,16 @@ const MATRIX_GENERATE = "MATRIX-GENERATE";
 
 export const rowAddActionCreator = (data) => ({
   type: ROW_ADD,
-  data: data
+  data: data,
 });
 export const rowRemActionCreator = (data) => ({
   type: ROW_REM,
-  data: data
+  data: data,
 });
-export const ceilClickActionCreator = (data) => ({
+export const ceilClickActionCreator = (data,data2) => ({
   type: CEIL_CLICK,
   data: data,
+  data2: data2,
 });
 export const ceilHoverActionCreator = (data) => ({
   type: CEIL_HOVER,
@@ -47,119 +48,123 @@ export const matrixGenActionCreator = (data) => ({
 });
 
 let initialState = {
-  sumHoverData: '',
+  sumHoverData: "",
   data: [
-    [{
+    [
+      {
         id: "abc",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "def",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "ghi",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
     ],
-    [{
+    [
+      {
         id: "jkl",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "mno",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "prs",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
     ],
-    [{
+    [
+      {
         id: "tuv",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "wxy",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
       {
         id: "zzz",
         amount: 101,
         pr: 30,
-        t: 0
+        t: 0,
       },
     ],
   ],
-  dataOneDim: [{
+  dataOneDim: [
+    {
       id: "abc",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "def",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "ghi",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "jkl",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "mno",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "prs",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "tuv",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "wxy",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
     {
       id: "zzz",
       amount: 101,
       pr: 30,
-      t: 0
+      t: 0,
     },
   ],
   _min: 2,
@@ -171,11 +176,10 @@ let initialState = {
   _matrixMaxCeil: 999,
   sum: [303, 303, 303],
   aver: [101, 101, 101],
-  sameX: [0,0,0],
+  sameX: [0, 0, 0],
 };
 
 const createRow = (col) => {
-
   return new Array(col).fill(0).map(() => ({
     id: Math.random().toString(16).substring(2, 8),
     amount: 100 + ((Math.random() * 900) >> 0),
@@ -191,7 +195,9 @@ const countAll = (st) => {
   do {
     for (let i = 0; i < col; i++) {
       st.aver[i] += st.dataOneDim[index].amount;
-      i === 0 ? st.sum[rowid] = st.dataOneDim[index].amount : st.sum[rowid] += st.dataOneDim[index].amount;
+      i === 0
+        ? (st.sum[rowid] = st.dataOneDim[index].amount)
+        : (st.sum[rowid] += st.dataOneDim[index].amount);
       index++;
     }
     for (let j = 0; j < col; j++)
@@ -200,9 +206,7 @@ const countAll = (st) => {
       );
     rowid++;
   } while (index < st.dataOneDim.length);
-  st.aver = [...(st.aver.map((el) =>
-    Math.floor(el / st.numOfRow)
-  ))];
+  st.aver = [...st.aver.map((el) => Math.floor(el / st.numOfRow))];
   return st;
 };
 const setMNX = (data, st) => {
@@ -220,12 +224,28 @@ const setMNX = (data, st) => {
   } else if (data.what === "n") {
     setter("numOfRow", data.data);
   } else if (data.what === "x") {
-    let x = data.data > (st.numOfCol * st.numOfRow - 1) ? 3 : data.data;
+    let x = data.data > st.numOfCol * st.numOfRow - 1 ? 3 : data.data;
     setter("numOfHiglight", x);
   } else {
     throw new Error("nothing to set, check action.what");
   }
-  return st
+  return st;
+};
+
+const findeSameX = (st, actioData) => {
+  st.sameX = [
+    ...st.dataOneDim
+      .slice()
+      .filter((el) => el.amount !== actioData)
+      .map((el) =>
+        Object.assign(el, {
+          t: Math.abs(el.amount - actioData),
+        })
+      )
+      .sort((a, b) => a.t - b.t)
+      .slice(0, st.numOfHiglight),
+  ];
+  return st;
 };
 
 const matrixReducer = (state = initialState, action) => {
@@ -259,21 +279,14 @@ const matrixReducer = (state = initialState, action) => {
         el.id === action.data ? (el.amount += 1) : ""
       );
       countAll(stateCopy);
+      findeSameX(stateCopy, action.data2);
       return stateCopy;
 
     case CEIL_HOVER:
       stateCopy = _.cloneDeep(state);
-      stateCopy.sameX = [...(stateCopy.dataOneDim
-        .slice()
-        .filter((el) => el.amount !== action.data)
-        .map((el) =>
-          Object.assign(el, {
-            t: Math.abs(el.amount - action.data)
-          })
-        )
-        .sort((a, b) => a.t - b.t)
-        .slice(0, stateCopy.numOfHiglight))];
+      findeSameX(stateCopy, action.data);
       return stateCopy;
+
     case CEIL_UNHOVER:
       stateCopy = _.cloneDeep(state);
       stateCopy.sameX = new Array(stateCopy.numOfCol).fill(0);
@@ -286,7 +299,7 @@ const matrixReducer = (state = initialState, action) => {
 
     case SUM_UNHOVER:
       stateCopy = _.cloneDeep(state);
-      stateCopy.sumHoverData = '';
+      stateCopy.sumHoverData = "";
       return stateCopy;
 
     case MATRIX_GENERATE:
