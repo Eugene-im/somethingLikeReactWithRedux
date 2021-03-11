@@ -1,0 +1,155 @@
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 500px;
+}
+
+.app-input {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 500px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 30%;
+
+  &.last {
+    flex: 1 1 100%;
+  }
+}
+
+.input-label,
+.input-item,
+.input-button {
+  line-height: 50px;
+}
+
+.input-item {
+  font-size: calc(10px + 1vmin);
+}
+
+.input-label,
+.input-item {
+  margin-bottom: 5px;
+  border-radius: 5px;
+  margin: 3px;
+  padding: 3px;
+}
+
+.input-button {
+  min-height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  color: #fff;
+  text-align: center;
+  background-color: rgb(83, 160, 83);
+  font: inherit;
+  padding: 1px 6px;
+  border: none;
+  margin-top: 15px;
+}
+
+.matrix-row {
+  display: flex;
+  align-items: center;
+}
+
+.matrix-cell {
+  width: 70px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 3px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.cell-item {
+  background-color: darkgreen;
+
+  &:hover {
+    background-color: #cecece;
+  }
+
+  &:active,
+  &.same {
+    background-color: #677969;
+  }
+}
+
+.cell-amount {
+  background-color: #61dafb75;
+}
+
+.cell-row-add {
+  background-color: rgb(83, 160, 83);
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+.cell-row-rem {
+  background-color: rgb(196, 85, 41);
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+.cell-average {
+  background-color: rgba(247, 173, 146, 0.568);
+}
+
+.cell-item-data-hover {
+  display: none;
+  background-color: red;
+  width: 100%;
+  align-self: flex-end;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* .App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+} 
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
