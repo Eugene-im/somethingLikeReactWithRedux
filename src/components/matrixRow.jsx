@@ -23,7 +23,7 @@ const MatrixRow = ({ index, sum, row }) => {
 const mapStateToProps = (state) => {
   return {
     sum: state.matrixPage.sum,
-    // data: state.matrixPage.data,
+    sameX: state.matrixPage.sameX,
   };
 };
 

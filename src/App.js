@@ -63,15 +63,10 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
                   row={row}
                   index={index}
                   key={index}
-                  // state={matrixPage}
-                  // rowAdd={rowAdd}
-                  // rowRem={rowRem}
-                  // state={props}
                 />
               ))}
               <MatrixRowAver
                 index={numOfCol + 1}
-                // aver={aver}
               />
             </div>
           {/* )} */}
@@ -84,7 +79,6 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
 
 const mapStateToProps = (state) => {
   return {
-    // matrixPage: state.matrixPage,
     data: state.matrixPage.data,
     dataOneDim: state.matrixPage.oneDimData,
     numOfCol: state.matrixPage.numOfCol,

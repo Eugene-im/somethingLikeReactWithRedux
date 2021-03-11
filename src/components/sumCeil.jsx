@@ -8,6 +8,7 @@ const SumCeil = ({sumHover,index,sum}) => {
   console.log("SumCeil ", sum);
   console.log("SumCeil ", index);
   const handler = (e) =>{
+    console.log('hover',e)
     sumHover(+e.target.attributes.dataid.value);
   }
   return (

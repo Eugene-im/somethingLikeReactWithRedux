@@ -37,10 +37,7 @@ export const matrixGenActionCreator = (data) => ({
 });
 
 let initialState = {
-  sumHoverData: {
-    hover: false,
-    rowId: ''
-  },
+  sumHoverData: '',
   data: [
     [{
         id: "abc",
@@ -236,8 +233,10 @@ const matrixReducer = (state = initialState, action) => {
   switch (action.type) {
     case ROW_ADD:
       stateCopy = _.cloneDeep(state);
-      stateCopy.data.splice(action.data, 0, createRow(stateCopy.numOfCol));
       stateCopy.numOfRow += 1;
+      let newRow = createRow(stateCopy.numOfCol);
+      stateCopy.data.splice(action.data, 0, newRow);
+      newRow.forEach((el)=>{stateCopy.dataOneDim.splice(action.data, 0, el)})
       countAll(stateCopy);
       return stateCopy;
 
@@ -263,7 +262,7 @@ const matrixReducer = (state = initialState, action) => {
 
     case CEIL_HOVER:
       stateCopy = _.cloneDeep(state);
-      stateCopy.sameX = [...(stateCopy.data
+      stateCopy.sameX = [...(stateCopy.dataOneDim
         .slice()
         .filter((el) => el.amount !== action.data)
         .map((el) =>
@@ -272,13 +271,14 @@ const matrixReducer = (state = initialState, action) => {
           })
         )
         .sort((a, b) => a.t - b.t)
-        .slice(stateCopy.numOfHiglight))];
+        .slice(0,stateCopy.numOfHiglight))];
       return stateCopy;
 
     case SUM_HOVER:
       stateCopy = _.cloneDeep(state);
-      stateCopy.sumHoverData.hover = true;
-      stateCopy.sumHoverData.rowId = action.data;
+      // stateCopy.sumHoverData = {};
+      // stateCopy.sumHoverData.hover = true;
+      stateCopy.sumHoverData = action.data;
       return stateCopy;
 
     case MATRIX_GENERATE:
