@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 const MatrixCeil = ({ ceilClick, ceilHover, ceilUnHover, data, matrixIndex, index, sumHoverData, sameX }) => {
   const handler = (e) => {
     if (e.type === 'click') {
-      ceilClick(e.target.id)
+      ceilClick(e.target.id,+e.target.innerText)
     } else if (e.type === 'mouseenter') {
       ceilHover(+e.target.innerText)
     } else if (e.type === 'mouseleave') {
@@ -45,8 +45,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    ceilClick: (data) => {
-      dispatch(ceilClickActionCreator(data));
+    ceilClick: (data,data2) => {
+      dispatch(ceilClickActionCreator(data,data2));
     },
     ceilHover: (data) => {
       dispatch(ceilHoverActionCreator(data));
