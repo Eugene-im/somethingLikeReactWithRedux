@@ -5,7 +5,8 @@ import {
 import { connect } from "react-redux";
 
 const SumCeil = ({sumHover,index,sum}) => {
-  // console.log("SumCeil ", props);
+  console.log("SumCeil ", sum);
+  console.log("SumCeil ", index);
   const handler = (e) =>{
     sumHover(+e.target.attributes.dataid.value);
   }

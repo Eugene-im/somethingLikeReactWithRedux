@@ -1,3 +1,4 @@
+import _ from "lodash";
 const ROW_ADD = "ROW-ADD";
 const ROW_REM = "ROW-REM";
 const CEIL_CLICK = "CEIL-CLICK";
@@ -234,34 +235,26 @@ const matrixReducer = (state = initialState, action) => {
   let stateCopy;
   switch (action.type) {
     case ROW_ADD:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.data.splice(action.data, 0, createRow(stateCopy.numOfCol));
       stateCopy.numOfRow += 1;
       countAll(stateCopy);
       return stateCopy;
 
     case ROW_REM:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.data.splice(action.data, 1);
       stateCopy.numOfRow -= 1;
       countAll(stateCopy);
       return stateCopy;
 
     case MNX_UPD:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       setMNX(action.data, stateCopy);
       return stateCopy;
 
     case CEIL_CLICK:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.dataOneDim.find((el) =>
         el.id === action.data ? (el.amount += 1) : ""
       );
@@ -269,9 +262,7 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case CEIL_HOVER:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.sameX = [...(stateCopy.data
         .slice()
         .filter((el) => el.amount !== action.data)
@@ -285,17 +276,13 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case SUM_HOVER:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.sumHoverData.hover = true;
       stateCopy.sumHoverData.rowId = action.data;
       return stateCopy;
 
     case MATRIX_GENERATE:
-      stateCopy = {
-        ...state
-      };
+      stateCopy = _.cloneDeep(state);
       stateCopy.data = new Array(action.data.n)
         .fill(0)
         .map(() => createRow(action.data.m));

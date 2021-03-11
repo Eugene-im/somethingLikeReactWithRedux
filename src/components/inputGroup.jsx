@@ -27,7 +27,8 @@ const InputGroup = ({ last, whatData, htFor, label, typeOfInput, updM, numOfCol,
         className="input-item"
         name={htFor}
         type={typeOfInput}
-        defaultValue={checkWhat(whatData)}
+        // defaultValue={checkWhat(whatData)}
+        value={checkWhat(whatData)}
         onChange={(e) => updM({ what: whatData, data: +e.target.value })}
       />
     </div>

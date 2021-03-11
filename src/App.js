@@ -4,11 +4,6 @@ import MatrixRow from "./components/matrixRow";
 import MatrixRowAver from "./components/matrixRowAver";
 import InputGroup from "./components/inputGroup";
 import {
-  rowAddActionCreator,
-  rowRemActionCreator,
-  ceilClickActionCreator,
-  ceilHoverActionCreator,
-  sumHoverActionCreator,
   mnxUpdActionCreator,
   matrixGenActionCreator,
 } from "./redux/matrixReducer";
@@ -16,8 +11,8 @@ import { connect } from "react-redux";
 
 const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
   console.log("APP data ", data);
-  const [rows, setRows] = React.useState(data);
-  useEffect(() => setRows(data), [data]);
+  // const [rows, setRows] = React.useState(data);
+  // useEffect(() => setRows(data), [data]);
   const [visible, setVisible] = React.useState(false);
   const handler = () => {
     generateMatrix(
@@ -63,7 +58,7 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
         <div className="app-output">
           {/* {visible && ( */}
             <div className="output-matrix matrix">
-              {rows.map((row, index) => (
+              {data.map((row, index) => (
                 <MatrixRow
                   row={row}
                   index={index}

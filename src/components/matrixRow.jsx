@@ -13,7 +13,7 @@ const MatrixRow = ({ index, sum, row }) => {
       {row.map((ceil, i) => (
         <MatrixCeil key={ceil.id} matrixIndex={index.toString() + (i + 1).toString()} data={ceil} />
       ))}
-      <SumCeil index={index} />
+      <SumCeil index={index} sum={sum}/>
       <ButtonCeil dataid={index} type='add' />
       <ButtonCeil dataid={index} type='rem' />
     </div>
