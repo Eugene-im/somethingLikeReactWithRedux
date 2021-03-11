@@ -1,18 +1,22 @@
 import React from "react";
 import {
   sumHoverActionCreator,
+  sumUnHoverActionCreator,
 } from "../redux/matrixReducer";
 import { connect } from "react-redux";
 
-const SumCeil = ({sumHover,index,sum}) => {
+const SumCeil = ({ sumHover, sumUnHover, index, sum }) => {
   console.log("SumCeil ", sum);
   console.log("SumCeil ", index);
-  const handler = (e) =>{
-    console.log('hover',e)
-    sumHover(+e.target.attributes.dataid.value);
+  const handler = (e) => {
+    if (e.type === 'mouseenter') {
+      sumHover(+e.target.attributes.dataid.value);
+    } else if (e.type === 'mouseleave') {
+      sumUnHover(+e.target.attributes.dataid.value);
+    }
   }
   return (
-    <div onMouseOver={(e)=>handler(e)} dataid={index} className="matrix-cell cell-amount">{sum[index]}</div>
+    <div onMouseEnter={(e) => handler(e)} onMouseLeave={(e) => handler(e)} dataid={index} className="matrix-cell cell-amount">{sum[index]}</div>
   );
 };
 
@@ -25,6 +29,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     sumHover: (data) => {
       dispatch(sumHoverActionCreator(data));
+    },
+    sumUnHover: (data) => {
+      dispatch(sumUnHoverActionCreator(data));
     },
   };
 };

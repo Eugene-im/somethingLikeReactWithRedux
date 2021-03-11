@@ -9,6 +9,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
 .App-main {
   display: flex;
   flex-direction: column;
@@ -16,6 +17,7 @@
   justify-content: space-around;
   min-height: 500px;
 }
+
 .app-input {
   display: flex;
   flex-wrap: wrap;
@@ -28,6 +30,7 @@
   display: flex;
   flex-direction: column;
   flex: 1 0 30%;
+
   &.last {
     flex: 1 1 100%;
   }
@@ -38,7 +41,8 @@
 .input-button {
   line-height: 50px;
 }
-.input-item{
+
+.input-item {
   font-size: calc(10px + 1vmin);
 }
 
@@ -49,6 +53,7 @@
   margin: 3px;
   padding: 3px;
 }
+
 .input-button {
   min-height: 50px;
   cursor: pointer;
@@ -71,7 +76,7 @@
 }
 
 .matrix-cell {
-  width: 50px;
+  width: 70px;
   height: 50px;
   cursor: pointer;
   border-radius: 5px;
@@ -82,11 +87,16 @@
   justify-content: center;
   user-select: none;
 }
+
 .cell-item {
+  background-color: darkgreen;
+
   &:hover {
     background-color: #cecece;
   }
-  &:active {
+
+  &:active,
+  &.same {
     background-color: #677969;
   }
 }
@@ -95,22 +105,29 @@
   background-color: #61dafb75;
 }
 
-.cell-row-add{
+.cell-row-add {
   background-color: rgb(83, 160, 83);
-  border:none;
+  border: none;
   color: inherit;
   font: inherit;
 }
 
-.cell-row-rem{
+.cell-row-rem {
   background-color: rgb(196, 85, 41);
-  border:none;
+  border: none;
   color: inherit;
   font: inherit;
 }
 
 .cell-average {
   background-color: rgba(247, 173, 146, 0.568);
+}
+
+.cell-item-data-hover {
+  display: none;
+  background-color: red;
+  width: 100%;
+  align-self: flex-end;
 }
 
 .App-link {

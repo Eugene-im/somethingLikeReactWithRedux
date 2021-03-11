@@ -3,7 +3,9 @@ const ROW_ADD = "ROW-ADD";
 const ROW_REM = "ROW-REM";
 const CEIL_CLICK = "CEIL-CLICK";
 const CEIL_HOVER = "CEIL-HOVER";
+const CEIL_UNHOVER = "CEIL-UNHOVER";
 const SUM_HOVER = "SUM-HOVER";
+const SUM_UNHOVER = "SUM-UNHOVER";
 const MNX_UPD = "MNX-UPD";
 const MATRIX_GENERATE = "MATRIX-GENERATE";
 
@@ -23,8 +25,16 @@ export const ceilHoverActionCreator = (data) => ({
   type: CEIL_HOVER,
   data: data,
 });
+export const ceilUnHoverActionCreator = (data) => ({
+  type: CEIL_UNHOVER,
+  data: data,
+});
 export const sumHoverActionCreator = (data) => ({
   type: SUM_HOVER,
+  data: data,
+});
+export const sumUnHoverActionCreator = (data) => ({
+  type: SUM_UNHOVER,
   data: data,
 });
 export const mnxUpdActionCreator = (data) => ({
@@ -161,7 +171,7 @@ let initialState = {
   _matrixMaxCeil: 999,
   sum: [303, 303, 303],
   aver: [101, 101, 101],
-  sameX: [101, 101, 101],
+  sameX: [0,0,0],
 };
 
 const setInputData = (m, n, x, st) => {
@@ -236,14 +246,17 @@ const matrixReducer = (state = initialState, action) => {
       stateCopy.numOfRow += 1;
       let newRow = createRow(stateCopy.numOfCol);
       stateCopy.data.splice(action.data, 0, newRow);
-      newRow.forEach((el)=>{stateCopy.dataOneDim.splice(action.data, 0, el)})
+      newRow.forEach((el) => {
+        stateCopy.dataOneDim.splice(action.data, 0, el)
+      })
       countAll(stateCopy);
       return stateCopy;
 
     case ROW_REM:
       stateCopy = _.cloneDeep(state);
       stateCopy.data.splice(action.data, 1);
-      stateCopy.numOfRow -= 1;
+      stateCopy.dataOneDim = stateCopy.data.flat();
+      stateCopy.numOfRow = stateCopy.numOfRow - 1;
       countAll(stateCopy);
       return stateCopy;
 
@@ -271,14 +284,21 @@ const matrixReducer = (state = initialState, action) => {
           })
         )
         .sort((a, b) => a.t - b.t)
-        .slice(0,stateCopy.numOfHiglight))];
+        .slice(0, stateCopy.numOfHiglight))];
+      return stateCopy;
+    case CEIL_UNHOVER:
+      stateCopy = _.cloneDeep(state);
+      stateCopy.sameX = new Array(stateCopy.numOfCol).fill(0);
       return stateCopy;
 
     case SUM_HOVER:
       stateCopy = _.cloneDeep(state);
-      // stateCopy.sumHoverData = {};
-      // stateCopy.sumHoverData.hover = true;
       stateCopy.sumHoverData = action.data;
+      return stateCopy;
+
+    case SUM_UNHOVER:
+      stateCopy = _.cloneDeep(state);
+      stateCopy.sumHoverData = '';
       return stateCopy;
 
     case MATRIX_GENERATE:

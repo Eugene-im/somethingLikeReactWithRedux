@@ -11,7 +11,7 @@ const MatrixRow = ({ index, sum, row }) => {
   return (
     <div className={`matrix-row row-${index}`}>
       {row.map((ceil, i) => (
-        <MatrixCeil key={ceil.id} matrixIndex={index.toString() + (i + 1).toString()} data={ceil} />
+        <MatrixCeil key={ceil.id} index={index} matrixIndex={index.toString() + (i + 1).toString()} data={ceil} />
       ))}
       <SumCeil index={index} sum={sum}/>
       <ButtonCeil dataid={index} type='add' />
@@ -23,7 +23,6 @@ const MatrixRow = ({ index, sum, row }) => {
 const mapStateToProps = (state) => {
   return {
     sum: state.matrixPage.sum,
-    sameX: state.matrixPage.sameX,
   };
 };
 
