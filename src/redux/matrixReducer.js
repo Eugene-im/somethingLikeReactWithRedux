@@ -236,9 +236,7 @@ const matrixReducer = (state = initialState, action) => {
       stateCopy.numOfRow += 1;
       let newRow = createRow(stateCopy.numOfCol);
       stateCopy.data.splice(action.data, 0, newRow);
-      newRow.forEach((el) => {
-        stateCopy.dataOneDim.splice(action.data, 0, el)
-      })
+      stateCopy.dataOneDim = stateCopy.data.flat();
       countAll(stateCopy);
       return stateCopy;
 
