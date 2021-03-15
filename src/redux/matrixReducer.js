@@ -1,4 +1,4 @@
-import _ from "lodash";
+// import _ from "lodash";
 const ROW_ADD = "ROW-ADD";
 const ROW_REM = "ROW-REM";
 const CEIL_CLICK = "CEIL-CLICK";
@@ -252,7 +252,7 @@ const matrixReducer = (state = initialState, action) => {
   let stateCopy;
   switch (action.type) {
     case ROW_ADD:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.numOfRow += 1;
       let newRow = createRow(stateCopy.numOfCol);
       stateCopy.data.splice(action.data, 0, newRow);
@@ -261,7 +261,7 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case ROW_REM:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.data.splice(action.data, 1);
       stateCopy.dataOneDim = stateCopy.data.flat();
       stateCopy.numOfRow = stateCopy.numOfRow - 1;
@@ -269,12 +269,12 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case MNX_UPD:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       setMNX(action.data, stateCopy);
       return stateCopy;
 
     case CEIL_CLICK:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.dataOneDim.find((el) =>
         el.id === action.data ? (el.amount += 1) : ""
       );
@@ -283,27 +283,27 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case CEIL_HOVER:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       findeSameX(stateCopy, action.data);
       return stateCopy;
 
     case CEIL_UNHOVER:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.sameX = new Array(stateCopy.numOfCol).fill(0);
       return stateCopy;
 
     case SUM_HOVER:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.sumHoverData = action.data;
       return stateCopy;
 
     case SUM_UNHOVER:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.sumHoverData = "";
       return stateCopy;
 
     case MATRIX_GENERATE:
-      stateCopy = _.cloneDeep(state);
+      stateCopy = {...state};
       stateCopy.data = new Array(action.data.n)
         .fill(0)
         .map(() => createRow(action.data.m));
