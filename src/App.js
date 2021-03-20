@@ -59,7 +59,7 @@ const App = ({ numOfCol, numOfRow, numOfHiglight, data, generateMatrix}) => {
                 <MatrixRow
                   row={row}
                   index={index}
-                  key={index}
+                  key={index+'b'}
                 />
               ))}
               <MatrixRowAver

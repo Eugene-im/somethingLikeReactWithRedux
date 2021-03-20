@@ -17,7 +17,7 @@ export const rowRemActionCreator = (data) => ({
   type: ROW_REM,
   data: data,
 });
-export const ceilClickActionCreator = (data,data2) => ({
+export const ceilClickActionCreator = (data, data2) => ({
   type: CEIL_CLICK,
   data: data,
   data2: data2,
@@ -206,7 +206,11 @@ const countAll = (st) => {
       );
     rowid++;
   } while (index < st.dataOneDim.length);
-  st.aver = [...st.aver.map((el) => Math.floor(el / st.numOfRow))];
+  // let buferData = st.data.map(el=>el);
+  // st.data = [];
+  // st.data = buferData.map(el=>el);
+  // // let buferData = st.data.map(el=>el)
+  st.aver = st.aver.map((el) => Math.floor(el / st.numOfRow));
   return st;
 };
 const setMNX = (data, st) => {
@@ -233,18 +237,11 @@ const setMNX = (data, st) => {
 };
 
 const findeSameX = (st, actioData) => {
-  st.sameX = [
-    ...st.dataOneDim
-      .slice()
-      .filter((el) => el.amount !== actioData)
-      .map((el) =>
-        Object.assign(el, {
-          t: Math.abs(el.amount - actioData),
-        })
-      )
-      .sort((a, b) => a.t - b.t)
-      .slice(0, st.numOfHiglight),
-  ];
+  st.sameX = st.dataOneDim
+    .slice()
+    .map((el) => ({ ...el, t: Math.abs(el.amount - actioData) }))
+    .sort((a, b) => a.t - b.t)
+    .slice(0, st.numOfHiglight + 1);
   return st;
 };
 
@@ -252,29 +249,33 @@ const matrixReducer = (state = initialState, action) => {
   let stateCopy;
   switch (action.type) {
     case ROW_ADD:
-      stateCopy = {...state};
-      stateCopy.numOfRow += 1;
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       let newRow = createRow(stateCopy.numOfCol);
       stateCopy.data.splice(action.data, 0, newRow);
+      stateCopy.numOfRow += 1;
       stateCopy.dataOneDim = stateCopy.data.flat();
       countAll(stateCopy);
       return stateCopy;
 
     case ROW_REM:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.data.splice(action.data, 1);
+      stateCopy.numOfRow -= 1;
       stateCopy.dataOneDim = stateCopy.data.flat();
-      stateCopy.numOfRow = stateCopy.numOfRow - 1;
       countAll(stateCopy);
       return stateCopy;
 
     case MNX_UPD:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       setMNX(action.data, stateCopy);
       return stateCopy;
 
     case CEIL_CLICK:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.dataOneDim.find((el) =>
         el.id === action.data ? (el.amount += 1) : ""
       );
@@ -283,27 +284,32 @@ const matrixReducer = (state = initialState, action) => {
       return stateCopy;
 
     case CEIL_HOVER:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       findeSameX(stateCopy, action.data);
       return stateCopy;
 
     case CEIL_UNHOVER:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.sameX = new Array(stateCopy.numOfCol).fill(0);
       return stateCopy;
 
     case SUM_HOVER:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.sumHoverData = action.data;
       return stateCopy;
 
     case SUM_UNHOVER:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.sumHoverData = "";
       return stateCopy;
 
     case MATRIX_GENERATE:
-      stateCopy = {...state};
+      // stateCopy = {...state};
+      stateCopy = JSON.parse(JSON.stringify(state));
       stateCopy.data = new Array(action.data.n)
         .fill(0)
         .map(() => createRow(action.data.m));

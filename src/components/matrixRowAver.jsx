@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 
 const MatrixRowAver = ({index,aver}) => {
   return (
-    <div key={index} className={`matrix-row average-row row-${index}`}>
+    <div key={index+'d'} className={`matrix-row average-row row-${index}`}>
       {aver.map((ceil, index) => (
-        <AverCeil index={index} key={index} data={ceil} />
+        <AverCeil index={index} key={index+'a'} data={ceil} />
       ))}
     </div>
   );
@@ -17,8 +17,6 @@ const mapStateToProps = (state) => {
     aver: state.matrixPage.aver,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(MatrixRowAver);
+
+export default connect(mapStateToProps, null)(MatrixRowAver);
