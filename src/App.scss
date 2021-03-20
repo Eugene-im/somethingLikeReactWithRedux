@@ -70,6 +70,7 @@
   font: inherit;
   padding: 1px 6px;
   border: none;
+  border-radius: 5px;
   margin-top: 15px;
 }
 
@@ -95,7 +96,8 @@
 .cell-item {
   background-color: darkgreen;
 
-  &:hover {
+  &:hover,
+  &.same:hover {
     background-color: #cecece;
   }
 
